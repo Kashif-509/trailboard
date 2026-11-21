@@ -4,6 +4,7 @@ import type { Trail, User, Conditions } from './types';
 import { trailItem, conditionsTable } from './render';
 import { sortByDifficulty } from './sort';
 import { debounce } from './utils';
+import { drawElevation } from './chart';
 
 const $ = <T extends HTMLElement>(sel: string) => document.querySelector(sel) as T;
 
@@ -19,12 +20,11 @@ function loadConditionsWhenVisible() {
   io.observe(target);
 }
 
-// The chart library is only downloaded the first time someone opens the Elevation tab.
+// Draw the elevation chart once, the first time the tab opens.
 let chartLoaded = false;
-async function showElevation(trails: Trail[]) {
+function showElevation(trails: Trail[]) {
   if (chartLoaded) return;
   chartLoaded = true;
-  const { drawElevation } = await import('./chart');
   drawElevation($('#elevation-chart') as HTMLCanvasElement, trails);
 }
 
