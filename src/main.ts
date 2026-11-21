@@ -3,7 +3,6 @@ import { getJSON } from './api';
 import type { Trail, User, Conditions } from './types';
 import { trailItem, conditionsTable } from './render';
 import { sortByDifficulty } from './sort';
-import { drawElevation } from './chart';
 import { debounce } from './utils';
 
 const $ = <T extends HTMLElement>(sel: string) => document.querySelector(sel) as T;
@@ -20,6 +19,15 @@ function loadConditionsWhenVisible() {
   io.observe(target);
 }
 
+// The chart library is only downloaded the first time someone opens the Elevation tab.
+let chartLoaded = false;
+async function showElevation(trails: Trail[]) {
+  if (chartLoaded) return;
+  chartLoaded = true;
+  const { drawElevation } = await import('./chart');
+  drawElevation($('#elevation-chart') as HTMLCanvasElement, trails);
+}
+
 async function boot() {
   // The two requests the first screen needs run in parallel.
   const [user, trails] = await Promise.all([
@@ -31,9 +39,6 @@ async function boot() {
   $('#trail-list').innerHTML = trails.map(trailItem).join('');
   loadConditionsWhenVisible();
 
-  // The elevation tab is hidden, but its chart is built right away anyway.
-  drawElevation($('#elevation-chart') as HTMLCanvasElement, trails);
-
   $('#sort-btn').addEventListener('click', () => sortByDifficulty(trails, $('#trail-list'), $('#sort-status')));
 
   document.querySelectorAll<HTMLButtonElement>('.tab').forEach((tab) =>
@@ -41,6 +46,7 @@ async function boot() {
       document.querySelectorAll('.tab').forEach((t) => t.classList.toggle('active', t === tab));
       $('#panel-list').hidden = tab.dataset.tab !== 'list';
       $('#panel-elevation').hidden = tab.dataset.tab !== 'elevation';
+      if (tab.dataset.tab === 'elevation') showElevation(trails);
     }),
   );
 

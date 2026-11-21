@@ -1,5 +1,6 @@
 import { defineConfig, type Plugin } from 'vite';
 import type { IncomingMessage, ServerResponse } from 'node:http';
+import { visualizer } from 'rollup-plugin-visualizer';
 import { makeTrails, user, conditions } from './mock/data';
 
 // Mock API: every /api/* call waits 250-350 ms, like a real backend would.
@@ -32,5 +33,9 @@ function mockApi(): Plugin {
 }
 
 export default defineConfig({
-  plugins: [mockApi()],
+  plugins: [
+    mockApi(),
+    // Writes bundle-report.html: a treemap of what is inside the JavaScript bundle.
+    visualizer({ filename: 'bundle-report.html', template: 'treemap', gzipSize: true, brotliSize: true }),
+  ],
 });
