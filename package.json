@@ -16,7 +16,8 @@
   },
   "dependencies": {
     "chart.js": "^4.4.0",
-    "lodash-es": "^4.18.1"
+    "lodash-es": "^4.18.1",
+    "moment": "^2.31.0"
   },
   "devDependencies": {
     "@lhci/cli": "^0.16.1",
