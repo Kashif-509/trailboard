@@ -12,12 +12,15 @@
       <span id="greeting" class="greeting"></span>
     </header>
 
-    <!-- Promo banner is injected here after load -->
+    <!-- Space for the promo banner is reserved up front, so nothing jumps -->
     <div id="promo-slot"></div>
 
     <main>
       <section class="hero">
-        <img src="/img/hero.png" loading="lazy" alt="A dirt trail winding through alpine meadows toward snowy peaks" />
+        <picture>
+          <source srcset="/img/hero.avif" type="image/avif" />
+          <img src="/img/hero.webp" width="1280" height="720" fetchpriority="high" alt="A dirt trail winding through alpine meadows toward snowy peaks" />
+        </picture>
         <div class="hero-text">
           <h1>Find your next trail</h1>
           <p>200 routes, live conditions, elevation profiles.</p>

@@ -8,15 +8,28 @@ import { debounce } from './utils';
 
 const $ = <T extends HTMLElement>(sel: string) => document.querySelector(sel) as T;
 
+// Below-the-fold widget: only fetch it when it is about to scroll into view.
+function loadConditionsWhenVisible() {
+  const target = $('#conditions');
+  const io = new IntersectionObserver(async (entries) => {
+    if (!entries.some((e) => e.isIntersecting)) return;
+    io.disconnect();
+    const conditions = await getJSON<Conditions>('/api/conditions');
+    target.innerHTML = conditionsTable(conditions);
+  }, { rootMargin: '200px' });
+  io.observe(target);
+}
+
 async function boot() {
-  // Three requests, one after another: each waits for the previous one.
-  const user = await getJSON<User>('/api/user');
-  const trails = await getJSON<Trail[]>('/api/trails');
-  const conditions = await getJSON<Conditions>('/api/conditions');
+  // The two requests the first screen needs run in parallel.
+  const [user, trails] = await Promise.all([
+    getJSON<User>('/api/user'),
+    getJSON<Trail[]>('/api/trails'),
+  ]);
 
   $('#greeting').textContent = `Hi, ${user.name}`;
   $('#trail-list').innerHTML = trails.map(trailItem).join('');
-  $('#conditions').innerHTML = conditionsTable(conditions);
+  loadConditionsWhenVisible();
 
   // The elevation tab is hidden, but its chart is built right away anyway.
   drawElevation($('#elevation-chart') as HTMLCanvasElement, trails);
@@ -33,7 +46,7 @@ async function boot() {
 
   window.addEventListener('resize', debounce(() => console.debug('resized'), 200));
 
-  // Late promo banner with no reserved space: pushes everything down.
+  // Promo banner still arrives late, but into space that is already reserved.
   setTimeout(() => {
     const promo = document.createElement('div');
     promo.className = 'promo';
