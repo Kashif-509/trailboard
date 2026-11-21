@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="TrailBoard: find your next hike." />
+    <title>TrailBoard</title>
+  </head>
+  <body>
+    <header class="topbar">
+      <strong class="logo">TrailBoard</strong>
+      <span id="greeting" class="greeting"></span>
+    </header>
+
+    <!-- Promo banner is injected here after load -->
+    <div id="promo-slot"></div>
+
+    <main>
+      <section class="hero">
+        <img src="/img/hero.png" loading="lazy" alt="A dirt trail winding through alpine meadows toward snowy peaks" />
+        <div class="hero-text">
+          <h1>Find your next trail</h1>
+          <p>200 routes, live conditions, elevation profiles.</p>
+        </div>
+      </section>
+
+      <nav class="tabs">
+        <button class="tab active" data-tab="list">Trails</button>
+        <button class="tab" data-tab="elevation">Elevation</button>
+      </nav>
+
+      <section id="panel-list">
+        <div class="controls">
+          <button id="sort-btn">Sort by difficulty</button>
+          <span id="sort-status" class="status"></span>
+        </div>
+        <ul id="trail-list" class="trail-list"></ul>
+      </section>
+
+      <section id="panel-elevation" hidden>
+        <canvas id="elevation-chart" width="800" height="300"></canvas>
+      </section>
+
+      <section id="conditions" class="conditions"></section>
+    </main>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.lighthouseci/
+bundle-report.html
+*.log
+.env
+.env.*

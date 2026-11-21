@@ -1,0 +1,25 @@
+{
+  "name": "trailboard",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "TrailBoard: a deliberately slow hiking-trail dashboard used to practise web performance fixes.",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --port 4173 --strictPort",
+    "size": "size-limit",
+    "lhci": "lhci autorun"
+  },
+  "dependencies": {
+    "chart.js": "^4.4.0",
+    "lodash": "^4.17.21",
+    "moment": "^2.30.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.0",
+    "vite": "^7.0.0",
+    "@types/lodash": "^4.17.0"
+  }
+}
