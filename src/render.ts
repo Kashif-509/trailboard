@@ -1,5 +1,9 @@
 import type { Trail, Conditions } from './types';
-import { km, timeAgo } from './utils';
+import moment from 'moment/min/moment-with-locales';
+import { km } from './utils';
+
+// Show 'updated ...' in the visitor's own language.
+const timeAgo = (iso: string) => moment(iso).locale(navigator.language).fromNow();
 
 export function trailItem(t: Trail): string {
   return `<li class="trail">
